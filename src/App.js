@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { GoogleLogin }  from '@react-oauth/google'
+import { jwtDecode } from 'jwt-decode';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  const handleSuccess = (credentialResponse) => {
+    // Decodificar o ID Token retornado pelo Google
+    const decodedToken = jwtDecode(credentialResponse.credential);
+
+    // Capturar nome e email
+    const { name, email } = decodedToken;
+
+    // Exibir no console
+    console.log('Nome:', name);
+    console.log('Email:', email);
+  };
+
+	return (
+		<div className="container">
+			<GoogleLogin 
+        
+        
+        onSuccess={handleSuccess}
+        onError={()=>{
+          console.log("login Failed");
+        }}
+                
+      />
+		</div>
+	);
 }
 
 export default App;
